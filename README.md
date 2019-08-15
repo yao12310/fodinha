@@ -1,6 +1,6 @@
-# Fodinha (Oh Hell!) Overview
+# Fodinha (Oh Hell) Overview
 
-Fodinha, known in English as "Oh Hell!", is a multi-player card game. In the rules variation playable in this project, each player starts the game with the same number of lives, and rounds are played until there is only one player remaining. Each round is comprised of some number of hands, in each of which the players all play one card: the player who plays the highest card is designated as the winner of that hand. At the beginning of each round, players receive their cards and predict the number of hands they will win. At the end of a round, each player loses lives according to the absolute difference of their original prediction and the actual number of wins.
+Fodinha, known in English as "Oh Hell", is a multi-player card game. In the rules variation playable in this project, each player starts the game with the same number of lives, and rounds are played until there is only one player remaining. Each round is comprised of some number of hands, in each of which the players all play one card: the player who plays the highest card is designated as the winner of that hand. At the beginning of each round, players receive their cards and predict the number of hands they will win. At the end of a round, each player loses lives according to the absolute difference of their original prediction and the actual number of wins.
 
 In this project, logic for playing the game was implemented in Python. Currently, the game is playable via command line: a UI for gameplay will be implemented, but the current focus is on building agents for automated gameplay.
 
