@@ -1,5 +1,5 @@
 '''
-Util file for strings used in decision making. (Not for messages)
+Util file for constants. (Not for messages)
 '''
 
 # Power Card Prompt Decisions

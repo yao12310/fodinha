@@ -1,3 +1,7 @@
+'''
+File for player type choosing logic.
+'''
+
 from players.manual import Manual
 from players.search import Search
 from players.prob import Easy
@@ -8,6 +12,10 @@ from players.nn import NeuralNet
 from players.rf import RandomForest
 from utils.constants import *
 
+'''
+Method for decision-making: called by Game instance
+Makes decisions for player type based on name
+'''
 def chooseStrategy(name, numLives, history):
     if EASY in name:
         return Easy(name, numLives, history)

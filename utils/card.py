@@ -1,13 +1,13 @@
 '''
-File for Card-related classes.
+Util file for Card-related classes.
 '''
 
 import itertools
 import random
 
 '''
-Class for representing collection of cards, used for decks, player hands, and lists of shown cards
-Deck houses a list of Card objects, and provides methods for shuffling and dealing cards
+Class for data structure representing collection of cards, used for decks, player hands, and lists of shown cards
+CardCollection houses a list of Card objects, and provides methods for shuffling and dealing cards
 '''
 class CardCollection:
 
@@ -98,6 +98,10 @@ class CardInfo:
         "7", "8", "9", "10", "J", "Q", "K"
     ]
 
+'''
+Static class for card utils
+Stores methods for ranking cards and joining collections
+'''
 class CardUtils:
     def cardRankerGen(power, cardRange):
         def cardRanker(card):
