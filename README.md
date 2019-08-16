@@ -61,13 +61,13 @@ Logic for the game follows an object-oriented paradigm, with classes representin
 
 Similarly, players of the game are also represented as objects, with several variations. To include one of these agents in a game, use a name that contains the appropriate string (i.e. for an Easy agent, include a player named ```EASY_1```).
 
- * Manual (default), which represents live human players
+ * Manual (default), which represents live human players. **[COMPLETE]**
  * Expected utility-based agents, with several variations of difficulty:
-   * Easy (```EASY```): Which compute expected values of wins assuming random play and play cards randomly
-   * Medium (```MEDIUM```): Similar to Easy, but do not play cards randomly
-   * Hard (```HARD```): Similar to medium, but considering additional information (previous calls, cancellations)
- * Search-based agents (```SEARCH```), which play the game using search algorithms
+   * Easy (```EASY```): Which compute expected values of wins assuming random play and play cards randomly. **[COMPLETE]**
+   * Medium (```MEDIUM```): Similar to Easy, but do not play cards randomly. **[IN PROGRESS]**
+   * Hard (```HARD```): Similar to medium, but considering additional information (previous calls, cancellations). **[IN PROGRESS]**
+ * Search-based agents (```SEARCH```), which play the game using search algorithms. **[IN PROGRESS]**
  * Classification-based agents, which use learning to treat decisions in the game as classification problems:
-   * Softmax (```SOFTMAX```): Simple multinomial logistic regression model
-   * Random Forest (```RANDOM_FOREST```): Random Forest-based play
-   * Neural Network (```NEURAL_NET```): Neural Network-based play
+   * Softmax (```SOFTMAX```): Simple multinomial logistic regression model. **[IN PROGRESS]**
+   * Random Forest (```RANDOM_FOREST```): Random Forest-based play. **[IN PROGRESS]**
+   * Neural Network (```NEURAL_NET```): Neural Network-based play. **[IN PROGRESS]**
