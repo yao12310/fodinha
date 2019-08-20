@@ -53,6 +53,8 @@ TODO: Fix dealer update logic, perhaps by not modifying names / players and usin
 TODO: Edge case handling for simultaneous loss (negative lives)
 	>> Done
 TODO: Edge case handling for when the entire hand cancels
+	>> Done
+TODO: Edge case handling for when every hand in the round fully cancels
 TODO: Fix winner not going first in the next hand
 	>> Done
 TODO: Suits shouldn't matter when ranking in AI (except power) -- use cardRanker but preserve O(n)

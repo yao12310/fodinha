@@ -53,15 +53,22 @@ class Round:
 
         # Play hands
         first = (self.dealer + 1) % self.numPlayers
+        winCarry = 0
 
         for i in range(self.numCards):
             print("Playing hand {} out of {} in this round. Going first is {}.".format(i + 1, self.numCards, self.names[first]))
+            if winCarry:
+                print("{} wins have carried over. This hand will count for {} wins.".format(winCarry, winCarry + 1))
             lastHand = (i == self.numCards - 1)
             if lastHand:
                 print("Last hand of the round! Will force plays from hand, no selection.")
             winner = self.startHand(first, lastHand)
-            first = winner
-            self.wins[winner] += 1
+            if not winner:
+                winCarry += 1
+            else:
+                first = winner
+                self.wins[winner] += 1 + winCarry
+                winCarry = 0
             print()
             time.sleep(SLEEP_TIME)
 

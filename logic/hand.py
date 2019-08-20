@@ -45,11 +45,16 @@ class Hand:
             else:
                 self.plays[curr] = choice
 
-        self.winner = self.plays.index(max(self.plays, key = self.cardRanker))
-        print("Final plays were: {}"
-            .format({self.names[i]: str(self.plays[i]) for i in range(self.numPlayers)})
-        )
-        print("The winner of the hand, playing a {}, is {}!".format(self.plays[self.winner], self.names[self.winner]))
+        if not any(self.plays):
+            print("All hands cancelled this round!")
+            print("Win will carry over to the next round.")
+            self.winner = None
+        else:
+            self.winner = self.plays.index(max(self.plays, key = self.cardRanker))
+            print("Final plays were: {}"
+                .format({self.names[i]: str(self.plays[i]) for i in range(self.numPlayers)})
+            )
+            print("The winner of the hand, playing a {}, is {}!".format(self.plays[self.winner], self.names[self.winner]))
 
     def checkCancel(self, name, choice):
         for i in range(self.numPlayers):
