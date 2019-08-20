@@ -7,6 +7,10 @@ To-Do List
 
 Implementations:
 
+TODO: General game logic
+	>> Done
+TODO: Manual player
+	>> Done
 TODO: Sort hands as players play cards
 TODO: Logic for 1-card hand size rounds
 	>> Done
@@ -45,6 +49,7 @@ TODO: Move utils and game play classes into separate directories
 Bug Fixes:
 
 TODO: Fix dealer update logic, perhaps by not modifying names / players and using elim
+	>> Done
 TODO: Edge case handling for simultaneous loss (negative lives)
 TODO: Edge case handling for when the entire hand cancels
 TODO: Fix winner not going first in the next hand
@@ -59,6 +64,7 @@ TODO: Show "Cancelled" instead of "None"
 TODO: Print dictionaries more cleanly instead of on one line (also, order entries by play)
 TODO: Plural vs singular when updating life counts
 TODO: README with rules and project overview
+	>> Done
 TODO: Exception for non-implemented player classes
 '''
 

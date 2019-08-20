@@ -47,8 +47,7 @@ class Game:
             elims = self.updateLives(diffs)
 
             # If eliminations, update roster
-            if elims:
-                self.updateRoster(elims)
+            self.updateRoster(elims)
 
             # Check for winner
             self.winner = self.checkWinner()
@@ -86,13 +85,23 @@ class Game:
         return newElims[::-1]
 
     def updateRoster(self, elims):
-        print("Eliminating players...")
-        for nameIndex in elims:
-            name = self.names.pop(nameIndex)
-            self.players.pop(nameIndex)
-            self.elim.append(name)
-            self.numPlayers -= 1
-            print("{} has been eliminated! {} players remain.".format(name, self.numPlayers))
+        self.dealer = (self.dealer + 1) % self.numPlayers
+        if not elims:
+            print("No players eliminated this round!")
+        else:
+            print("Eliminating players...")
+            # have to keep moving dealer index until reaching a non-elim player
+            while self.dealer in elims:
+                self.dealer = (self.dealer + 1) % self.numPlayers
+            for nameIndex in elims:
+                # shift index of dealer down if an earlier player is elim
+                if nameIndex < self.dealer:
+                    self.dealer -= 1
+                name = self.names.pop(nameIndex)
+                self.players.pop(nameIndex)
+                self.elim.append(name)
+                self.numPlayers -= 1
+                print("{} has been eliminated! {} players remain.".format(name, self.numPlayers))
         print()
         time.sleep(SLEEP_TIME)
 
@@ -101,7 +110,6 @@ class Game:
             return self.names[0]
 
     def updateRound(self):
-        self.dealer = (self.dealer + 1) % self.numPlayers
         if (self.round + 1) * self.numPlayers > (self.cardRange * 4 - self.powerTries):
             self.round -= 1
         else:
