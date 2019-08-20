@@ -51,6 +51,7 @@ Bug Fixes:
 TODO: Fix dealer update logic, perhaps by not modifying names / players and using elim
 	>> Done
 TODO: Edge case handling for simultaneous loss (negative lives)
+	>> Done
 TODO: Edge case handling for when the entire hand cancels
 TODO: Fix winner not going first in the next hand
 	>> Done

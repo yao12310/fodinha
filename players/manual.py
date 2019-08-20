@@ -67,11 +67,11 @@ class Manual(Player):
             index = int(input("{}, submit the index of your choice of card (0-indexed): ".format(self.name)))
         except ValueError as e:
             print("You have entered a non-numerical value! You must re-choose.")
-            return self.chooseCard(calls, wins, plays, power)
+            return self.chooseCard(calls, wins, plays, power, plays)
 
         if index < 0 or index >= len(self.currHand):
             print("You have made an illegal selection! You must re-choose.")
-            return self.chooseCard(calls, wins, plays, power)
+            return self.chooseCard(calls, wins, plays, power, plays)
 
         choice = self.currHand.pop(index)
         print("{} played the {}.".format(self.name, str(choice)))

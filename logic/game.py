@@ -82,12 +82,43 @@ class Game:
                 newElims.append(i)
         print()
         time.sleep(SLEEP_TIME)
+        # need to reverrse list to avoid indexing issues when eliminating players
         return newElims[::-1]
 
     def updateRoster(self, elims):
         self.dealer = (self.dealer + 1) % self.numPlayers
         if not elims:
             print("No players eliminated this round!")
+        # edge case handling for entire field elimination
+        elif len(elims) == self.numPlayers:
+            print("All players simultaneously eliminated!")
+            print("Players with less than maximal lives (if any) will be eliminated.")
+            print("Remaining players (if more than 1) will play overtime at 1 life each.")
+            topLives = max([player.lives for player in self.players])
+
+            # check which player(s) have the top number of lives
+            realElims = []
+            for nameIndex in range(self.numPlayers):
+                if self.players[nameIndex].lives != topLives:
+                    realElims.append(nameIndex)
+
+            # have to keep moving dealer index until reaching a non-elim player
+            while self.dealer in realElims:
+                self.dealer = (self.dealer + 1) % self.numPlayers
+
+            # handle eliminations mostly the same, only give 1 life to overtime players
+            for nameIndex in list(range(self.numPlayers))[::-1]:
+                if nameIndex in realElims:
+                    if nameIndex < self.dealer:
+                        self.dealer -= 1
+                    name = self.names.pop(nameIndex)
+                    self.players.pop(nameIndex)
+                    self.elim.append(name)
+                    self.numPlayers -= 1
+                    print("{} has been eliminated! {} players remain.".format(name, self.numPlayers))
+                else:
+                    self.players[nameIndex].lives = 1
+                    print("{} remains in game with 1 life!".format(self.names[nameIndex]))
         else:
             print("Eliminating players...")
             # have to keep moving dealer index until reaching a non-elim player
