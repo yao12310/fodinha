@@ -32,7 +32,7 @@ class Game:
         self.powerTries = powerTries
 
     def playGame(self):
-        self.round = 10
+        self.round = 1
         self.winner = None
         self.dealer = 0
         self.elim = []

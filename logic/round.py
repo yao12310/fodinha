@@ -113,7 +113,7 @@ class Round:
                 print("{} has been forced as the power card!".format(namedCand))
                 shown.append(draw)
                 print()
-                time.sleep(1)
+                time.sleep(SLEEP_TIME)
                 return (cand, shown)
 
             decision = player.choosePower(cand, shown)

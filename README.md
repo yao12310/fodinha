@@ -39,6 +39,7 @@ For more information about the game, see https://en.wikipedia.org/wiki/Oh_Hell.
    * With the exception of power cards, cards of the same rank "cancel".
      * They are removed from play, so the corresponding players can't win the round.
      * If every card is cancelled, then the next hand counts for an extra win.
+     * If every card is cancelled in every hand in a round, then no wins are given for the entire round.
  * Once all hands have been played, the number of wins for each player is counted.
    * Each player loses lives according to how much their call was off from their actual number of wins (absolute difference).
    * Players are eliminated at this phase if their remaining life count is non-positive.
