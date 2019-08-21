@@ -106,6 +106,8 @@ class Easy(Player):
 
     def makeOneCardCall(self, currCalls, numPlayers, roundNum, power, shown, illegal, cardRange, cardRanker, namedDeals = {}):
         if illegal == 0 or illegal == 1:
+            self.currCall = 1 - illegal
+            self.calls.append(1 - illegal)
             return 1 - illegal
         dealtCards = list([card for (name, card) in namedDeals.items() if name != self.name])
         cardsSet = set(dealtCards)
@@ -153,7 +155,108 @@ Implements round-level decisions via the following logic:
             Considers whether cards already played this hand can win and players coming after
         Check expected value of wins for playing each card, take card which gets closest to call
 '''
-class Medium(Easy):
+class Medium(Player):
+
+    def choosePower(self, cand, shown):
+        if cand in shown:
+            return POWER_YES
+        return POWER_NO
+
+    def makeCall(self, currCalls, numPlayers, roundNum, power, shown, illegal, cardRange, cardRanker, namedDeals = {}):
+        self.cardRanker = cardRanker
+        if namedDeals:
+            return self.makeOneCardCall(currCalls, numPlayers, roundNum, power, shown, illegal, cardRange, cardRanker, namedDeals)
+
+        allCards = []
+        for num in range(cardRange):
+            if num == power:
+                continue
+            for suit in CardInfo.SUITS:
+                card = Card(num, suit)
+                allCards.append((card, card in self.currHand, card in shown))
+        for suit in CardInfo.SUITS:
+            powerCard = Card(power, suit)
+            allCards.append((powerCard, powerCard in self.currHand, powerCard in shown))
+
+        count = 0
+        # number of cards remaining that each card is greater than
+        greatThan = {}
+        for cardData in allCards:
+            if cardData[1]:
+                greatThan[cardData[0]] = count
+            elif cardData[2]:
+                continue
+            else:
+                count += 1
+
+        count = 0
+        # number of cards remaining that each card is less than
+        lessThan = {}
+        for cardData in allCards[::-1]:
+            if cardData[1]:
+                lessThan[cardData[0]] = count
+            elif cardData[2]:
+                continue
+            else:
+                count += 1
+
+        call = 0
+        total = 0
+        for card in self.currHand:
+            great = greatThan[card]
+            less = lessThan[card]
+            hypergeom = sc.hypergeom(great + less, less, numPlayers - 1)
+            prob = hypergeom.pmf(0)
+            print(card, prob, great, less)
+            if prob > .5:
+                call += 1
+            total += prob
+        average = total / roundNum
+
+        # if call would be illegal, average probability informs + or -
+        # unless call would be over the total, in which case go down
+        # or if call would be negative, in which case go up
+        if call == illegal:
+            if call == roundNum:
+                call -= 1
+            elif call == 0:
+                call += 1
+            else:
+                call = call + (average > .5) - (average <= .5)
+
+        self.currCall = call
+        self.calls.append(call)
+
+        return call
+
+    def makeOneCardCall(self, currCalls, numPlayers, roundNum, power, shown, illegal, cardRange, cardRanker, namedDeals = {}):
+        if illegal == 0 or illegal == 1:
+            self.currCall = 1 - illegal
+            self.calls.append(1 - illegal)
+            return 1 - illegal
+        dealtCards = list([card for (name, card) in namedDeals.items() if name != self.name])
+        cardsSet = set(dealtCards)
+        topCard = dealtCards[dealtCards.index(max(dealtCards, key = self.cardRanker))]
+        topRank = self.cardRanker(topCard)
+        total = 0
+        greater = 0
+        for num in range(cardRange):
+            for suit in CardInfo.SUITS:
+                card = Card(num, suit)
+                if card in shown:
+                    continue
+                if card in cardsSet:
+                    continue
+                if self.cardRanker(card) > topRank:
+                    greater += 1
+                total += 1
+        print([str(card) for card in dealtCards], greater / total)
+        call = 1 * (greater / total > .5)
+
+        self.currCall = call
+        self.calls.append(call)
+
+        return call
 
     def chooseCard(self, calls, wins, lastHand, power, plays, namedPlays, shown, cardRange):
         allCards = []

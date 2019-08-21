@@ -20,11 +20,10 @@ TODO: Logic for stopping Easy AI from making illegal calls
 	>> Done
 TODO: Logic for Easy AI on one-card hands
 	>> Done
-TODO: Medium AI, various upgrades on Easy:
-	Adjust thresholds for calls based on the calls so far
-	Non-random selection of cards during hands
-	Find a way around assuming uniformity (perhaps Hard AI)
-	Detect cancellations (especially on one-card hands)
+TODO: Medium AI: Non-random selection of cards during hands
+	>> Done
+TODO: Trial mode for playing arbitrary numbers of games
+	>> Done
 
 Refactoring:
 
@@ -73,13 +72,39 @@ TODO: Exception for non-implemented player classes
 TODO: Correct standings past first place at end of game
 '''
 
-from logic.game import Game
 import sys
+from random import shuffle
+from numpy import mean
 
-cardRange = int(sys.argv[1])
-numLives = int(sys.argv[2])
-powerTries = int(sys.argv[3])
-names = sys.argv[4:]
+from logic.game import Game
 
-game = Game(names, cardRange, numLives, powerTries)
-game.playGame()
+trials = bool(sys.argv[1])
+if not trials:
+	cardRange = int(sys.argv[2])
+	numLives = int(sys.argv[3])
+	powerTries = int(sys.argv[4])
+	names = sys.argv[5:]
+	game = Game(names, cardRange, numLives, powerTries)
+	game.playGame()
+else:
+	numTrials = int(sys.argv[2])
+	cardRange = int(sys.argv[3])
+	numLives = int(sys.argv[4])
+	powerTries = int(sys.argv[5])
+	names = sys.argv[6:]
+	wins = {name: 0 for name in names}
+	finishes = {name: [] for name in names}
+	for _ in range(numTrials):
+		shuffle(names)
+		game = Game(names.copy(), cardRange, numLives, powerTries)
+		game.playGame()
+		standings = game.standings
+		wins[standings[0]] += 1
+		curr = 1
+		for stand in standings:
+			finishes[stand].append(curr)
+			curr += 1
+	print("Trials: {}".format(numTrials))
+	print("Wins by player: {}".format(wins))
+	print("Average finish by player: {}".format({name: mean(stand) for (name, stand) in finishes.items()}))
+
