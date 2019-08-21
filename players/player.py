@@ -11,6 +11,7 @@ Player stores player-level information:
         Hands had, calls made, lives lost
     Player round information:
         Current hand (passed down from round.py), current call
+        Card ranker for the current round is also passed down, used by computer players
 Functionalities:
     Game-level updates:
         Setting hand and losing lives (info passed down from game.py)
@@ -44,8 +45,8 @@ class Player:
     def choosePower(self, cand, shown):
         pass
 
-    def makeCall(self, currCalls, numPlayers, roundNum, power, shown, illegal, cardRange, namedDeals = {}):
+    def makeCall(self, currCalls, numPlayers, roundNum, power, shown, illegal, cardRange, cardRanker, namedDeals = {}):
         pass
 
-    def chooseCard(self, calls, wins, lastHand, power, plays):
+    def chooseCard(self, calls, wins, lastHand, power, plays, namedPlays, shown, cardRange):
         pass

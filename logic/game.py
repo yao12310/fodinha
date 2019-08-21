@@ -57,9 +57,9 @@ class Game:
 
         print("Game over! The winner is {}.".format(self.winner))
         standString = "Final Standings:"
-        standings = [self.winner] + self.elim[::-1]
+        self.standings = [self.winner] + self.elim[::-1]
         rank = 1
-        for name in standings:
+        for name in self.standings:
             standString += "\n\t{}) {}".format(rank, name)
             rank += 1
         print(standString)

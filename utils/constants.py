@@ -2,9 +2,10 @@
 Util file for constants. (Not for messages)
 '''
 
-# Power Card Prompt Decisions
+# Game play strings
 POWER_YES = "y"
 POWER_NO = "n"
+CANCELLED = "Cancelled"
 
 # Strategies
 EASY = "EASY"

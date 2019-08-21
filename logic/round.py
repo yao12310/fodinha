@@ -17,7 +17,7 @@ Round stores round-level information:
         Dealer, number of cards to be dealt
     Round state:
         Current power card, calls, wins, first player
-    Round history: Hands played
+    Round history: Hands played, cards shown so far
 Functionalities:
     Round set-up: shuffle and deal cards, power card, calls
     Launches Hand instances (passes down name, players, calls, wins, power card)
@@ -146,7 +146,7 @@ class Round:
             print("It is currently {}'s turn to make a call.".format(name))
             calls[curr] = self.players[curr].makeCall(
                 namedCalls, self.numPlayers, self.numCards, self.power, 
-                self.shown, illegal, self.cardRange, namedDeals
+                self.shown, illegal, self.cardRange, self.cardRanker, namedDeals
             )
             namedCalls[self.names[curr]] = calls[curr]
             print("{} calls {}!".format(name, calls[curr]))
@@ -155,7 +155,9 @@ class Round:
         return calls
 
     def startHand(self, first, lastHand):
-        currHand = Hand(first, lastHand, self.names, self.players, self.calls, self.wins, self.power, self.cardRanker)
+        currHand = Hand(first, lastHand, self.names, self.players, self.calls, 
+            self.wins, self.power, self.cardRanker, self.shown, self.cardRange
+        )
         currHand.playHand()
         self.hands.append(currHand)
         return currHand.getWinner()

@@ -5,6 +5,8 @@ Util file for Card-related classes.
 import itertools
 import random
 
+from utils.constants import CANCELLED
+
 '''
 Class for data structure representing collection of cards, used for decks, player hands, and lists of shown cards
 CardCollection houses a list of Card objects, and provides methods for shuffling and dealing cards
@@ -106,6 +108,8 @@ class CardUtils:
     def cardRankerGen(power, cardRange):
         def cardRanker(card):
             if not card:
+                return -1
+            if card == CANCELLED:
                 return -1
             if card.num != power:
                 return card.num

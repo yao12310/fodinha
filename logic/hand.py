@@ -2,11 +2,13 @@
 File for Hand class.
 '''
 
+from utils.constants import CANCELLED
+
 '''
 Hand stores hand-level information:
     Game and round info and meta hand settings passed down from Round:
-        Game: List of names and Player objects
-        Round: Original calls, current wins, power card, comparison fn
+        Game: List of names and Player objects, card range
+        Round: Original calls, current wins, power card, comparison fn, cards shown in the round
         Meta: First player in the hand, whether it is the last hand of the round
 Funcitonalities:
     Calls on Player instances to select cards
@@ -14,7 +16,7 @@ Funcitonalities:
 '''
 class Hand:
 
-    def __init__(self, first, lastHand, names, players, calls, wins, power, cardRanker):
+    def __init__(self, first, lastHand, names, players, calls, wins, power, cardRanker, shown, cardRange):
         self.first = first
         self.lastHand = lastHand
         self.names = names
@@ -23,6 +25,8 @@ class Hand:
         self.wins = wins
         self.power = power
         self.cardRanker = cardRanker
+        self.shown = shown
+        self.cardRange = cardRange
         self.numPlayers = len(names)
 
     def playHand(self):
@@ -34,18 +38,21 @@ class Hand:
             curr = (self.first + i) % self.numPlayers
             name = self.names[curr]
             choice = self.players[curr].chooseCard(
-                namedCalls, namedWins, self.lastHand, self.power,
-                {self.names[j]: str(self.plays[j]) for j in range(self.numPlayers)}
+                namedCalls, namedWins, self.lastHand, self.power, self.plays,
+                {self.names[j]: str(self.plays[j]) for j in range(self.numPlayers)}, self.shown, self.cardRange
             )
-
+            # hand is given reference to cards shown this round, pass and update
+            self.shown.append(choice)
             if choice.num != self.power:
                 cancelled = self.checkCancel(name, choice)
                 if not cancelled:
                     self.plays[curr] = choice
+                else:
+                    self.plays[curr] = CANCELLED
             else:
                 self.plays[curr] = choice
 
-        if not any(self.plays):
+        if all([play == CANCELLED for play in self.plays]):
             print("All hands cancelled this round!")
             print("Win will carry over to the next round.")
             self.winner = None
@@ -60,12 +67,14 @@ class Hand:
         for i in range(self.numPlayers):
             if not self.plays[i]:
                 continue
+            if self.plays[i] == CANCELLED:
+                continue
             if self.plays[i].rank == choice.rank:
                 print("{}'s {} cancelled with {}'s {}!"
                     .format(name, str(choice), self.names[i], str(self.plays[i]))
                 )
                 print()
-                self.plays[i] = None
+                self.plays[i] = CANCELLED
                 return True
         return False
 

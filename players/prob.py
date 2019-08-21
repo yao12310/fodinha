@@ -14,13 +14,13 @@ from utils.constants import POWER_YES
 from utils.constants import POWER_NO
 
 '''
-Class for simple AI player (expected utility).
+Class for Easy AI player (expected utility).
 Implements round-level decisions via the following logic:
     Choosing power card: Default to showing 3 cards, unless candidate has been shown
     Make call:
         Assumes uniform distribution of cards across other hands and random play
         Does not update according to other information and ignores cancellation
-        Computes expected value of wins based on cards in hand
+        Makes calls per card depending on probability of victory
         Math: X ~ hypergeometric(g + l, l, p - 1), where:
             X is RV representing # cards played each hand > card in hand
             g, l are # cards the card is greater than and less than among all remaining cards
@@ -37,9 +37,10 @@ class Easy(Player):
             return POWER_YES
         return POWER_NO
 
-    def makeCall(self, currCalls, numPlayers, roundNum, power, shown, illegal, cardRange, namedDeals = {}):
+    def makeCall(self, currCalls, numPlayers, roundNum, power, shown, illegal, cardRange, cardRanker, namedDeals = {}):
+        self.cardRanker = cardRanker
         if namedDeals:
-            return self.makeOneCardCall(currCalls, numPlayers, roundNum, power, shown, illegal, cardRange, namedDeals)
+            return self.makeOneCardCall(currCalls, numPlayers, roundNum, power, shown, illegal, cardRange, cardRanker, namedDeals)
 
         allCards = []
         for num in range(cardRange):
@@ -98,16 +99,18 @@ class Easy(Player):
             else:
                 call = call + (average > .5) - (average <= .5)
 
+        self.currCall = call
+        self.calls.append(call)
+
         return call
 
-    def makeOneCardCall(self, currCalls, numPlayers, roundNum, power, shown, illegal, cardRange, namedDeals = {}):
+    def makeOneCardCall(self, currCalls, numPlayers, roundNum, power, shown, illegal, cardRange, cardRanker, namedDeals = {}):
         if illegal == 0 or illegal == 1:
             return 1 - illegal
         dealtCards = list([card for (name, card) in namedDeals.items() if name != self.name])
         cardsSet = set(dealtCards)
-        cardRanker = CardUtils.cardRankerGen(power, cardRange)
-        topCard = dealtCards[dealtCards.index(max(dealtCards, key = cardRanker))]
-        topRank = cardRanker(topCard)
+        topCard = dealtCards[dealtCards.index(max(dealtCards, key = self.cardRanker))]
+        topRank = self.cardRanker(topCard)
         total = 0
         greater = 0
         for num in range(cardRange):
@@ -117,14 +120,18 @@ class Easy(Player):
                     continue
                 if card in cardsSet:
                     continue
-                if cardRanker(card) > topRank:
+                if self.cardRanker(card) > topRank:
                     greater += 1
                 total += 1
         print([str(card) for card in dealtCards], greater / total)
         call = 1 * (greater / total > .5)
+
+        self.currCall = call
+        self.calls.append(call)
+
         return call
 
-    def chooseCard(self, calls, wins, lastHand, power, plays):
+    def chooseCard(self, calls, wins, lastHand, power, plays, namedPlays, shown, cardRange):
         rand = sc.randint(0, len(self.currHand)).rvs()
         choice = self.currHand.pop(rand)
         print("{} played the {}.".format(self.name, str(choice)))
@@ -132,13 +139,97 @@ class Easy(Player):
         time.sleep(SLEEP_TIME)
         return choice
 
-class Medium(Player):
+'''
+Class for Medium AI player (expected utility).
+Implements round-level decisions via the following logic:
+    Choosing power card: Same as Easy
+    Make call: Same as Easy
+    Choose card:
+        Assumes randomness in play from other players
+        Caches probability of wins computed during call making to rank cards
+        Updates probability of a win for each card whenever turn to select:
+            Computes both probability of a win for the current hand and future hands
+            Tracks cards shown through course of play during the round and current hand
+            Considers whether cards already played this hand can win and players coming after
+        Check expected value of wins for playing each card, take card which gets closest to call
+'''
+class Medium(Easy):
 
-    def choosePower(self, cand, shown):
-        if cand in shown:
-            return POWER_YES
-        return POWER_NO
+    def chooseCard(self, calls, wins, lastHand, power, plays, namedPlays, shown, cardRange):
+        allCards = []
+        for num in range(cardRange):
+            if num == power:
+                continue
+            for suit in CardInfo.SUITS:
+                card = Card(num, suit)
+                allCards.append((card, card in self.currHand, card in shown))
+        for suit in CardInfo.SUITS:
+            powerCard = Card(power, suit)
+            allCards.append((powerCard, powerCard in self.currHand, powerCard in shown))
+
+        count = 0
+        # number of cards remaining that each card is greater than
+        greatThan = {}
+        for cardData in allCards:
+            if cardData[1]:
+                greatThan[cardData[0]] = count
+            elif cardData[2]:
+                continue
+            else:
+                count += 1
+
+        count = 0
+        # number of cards remaining that each card is less than
+        lessThan = {}
+        for cardData in allCards[::-1]:
+            if cardData[1]:
+                lessThan[cardData[0]] = count
+            elif cardData[2]:
+                continue
+            else:
+                count += 1
+
+        # find probability of winning the current hand and for a future hand
+        currProbs = []
+        genProbs = []
+        after = len(calls) - len([play for play in plays if play != None])
+        for i in range(len(self.currHand)):
+            card = self.currHand.get(i)
+            feasible = True
+            cardRank = self.cardRanker(card)
+            for play in plays:
+                if self.cardRanker(play) >= cardRank:
+                    feasible = False
+                    break
+            great = greatThan[card]
+            less = lessThan[card]
+            if feasible:
+                if not after:
+                    currProbs.append(1)
+                else:
+                    currProbs.append(sc.hypergeom(great + less, less, after).pmf(0))
+            else:
+                currProbs.append(0)
+            genProbs.append(sc.hypergeom(great + less, less, len(calls) - 1).pmf(0))
+
+        # compute additional expected wins given each possible play
+        expected = []
+        for i in range(len(self.currHand)):
+            curr = currProbs[i]
+            for j in range(len(self.currHand)):
+                if j == i:
+                    continue
+                curr += genProbs[j]
+            expected.append(curr)
+
+        # take the choice whose play this turn minimizes expected distance between wins and call
+        choiceIndex = expected.index(min(expected, key = lambda e: abs(e - self.currCall)))
+        choice = self.currHand.pop(choiceIndex)
+        print("{} played the {}.".format(self.name, str(choice)))
+        print()
+        time.sleep(SLEEP_TIME)
+        return choice
 
 class Hard(Player):
 
-	pass
+    pass
