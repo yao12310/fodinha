@@ -1,5 +1,5 @@
 '''
-File for Softmax player class.
+File for Logistic player class.
 '''
 
 from players.player import Player
@@ -15,8 +15,7 @@ Modelling approach for making calls:
 		Sum of calls made so far
 		Number of players who've made calls
 		Number of remaining players
-		Number of remaining cards between each card in hand
-			i.e. for an n-card hand, n + 1 buckets to place remaining cards
+		Counts of remaining cards less and greater than for each card (ordered by cards in hand)
 Modelling approach for playing cards:
 	Also treated as a multi-class classification problem (top, second, third... etc ranked cards)
 	Different model for each hand size (i.e. cards remaining to be played)

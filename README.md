@@ -68,8 +68,9 @@ Similarly, players of the game are also represented as objects, with several var
    * Medium (```MEDIUM```): Similar to Easy, but do not play cards randomly. **[COMPLETE]**
    * Hard (```HARD```): Similar to medium, but considering additional information (previous calls, cancellations). **[IN PROGRESS]**
  * Search-based agents (```SEARCH```), which play the game using search algorithms. **[IN PROGRESS]**
- * Reinforcement learning-based agents (```REINFORCEMENT```), which apply reinforcement learning. **[IN PROGRESS]**
+ * Reinforcement learning-based agents, which apply reinforcement learning.
+   * QLearning (```QLEARN```): Learn Q-values through experience (epsilon greedy) **[IN PROGRESS]**
+   * QApproximate (```QAPPROXIMATE```): Learn weights for approximating Q-values linearly **[IN PROGRESS]**
  * Classification-based agents, which use learning to treat decisions in the game as classification problems:
    * Softmax (```LOGISTIC```): Simple multinomial logistic regression model. **[IN PROGRESS]**
-   * Random Forest (```RANDOM_FOREST```): Random Forest-based play. **[IN PROGRESS]**
    * Neural Network (```NEURAL_NET```): Neural Network-based play. **[IN PROGRESS]**

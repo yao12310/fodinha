@@ -9,8 +9,8 @@ from players.prob import Medium
 from players.prob import Hard
 from players.logistic import Logistic
 from players.nn import NeuralNet
-from players.rf import 
-from players.reinforcement import Reinforcement
+from players.reinforcement import QLearning
+from players.reinforcement import QApproximate
 from utils.constants import *
 
 '''
@@ -30,9 +30,9 @@ def chooseStrategy(name, numLives, history):
         return Logistic(name, numLives, history)
     elif NEURAL_NET in name:
         return NeuralNet(name, numLives, history)
-    elif RANDOM_FOREST in name:
-        return RandomForest(name, numLives, history)
-    elif REINFORCEMENT in name:
-        return Reinforcement(name, numLives, history)
+    elif Q_LEARN in name:
+        return QLearning(name, numLives, history)
+    elif Q_APPROXIMATE in name:
+        return QApproximate(name, numLives, history)
     else:
         return Manual(name, numLives, history)

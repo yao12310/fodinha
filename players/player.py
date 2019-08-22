@@ -22,6 +22,8 @@ Functionalities:
 '''
 class Player:
 
+    # Implemented methods for game-level updates and information passing
+
     def __init__(self, name, numLives, history):
         self.name = name
         self.lives = numLives
@@ -42,6 +44,10 @@ class Player:
         print("{} has lost {} lives! {} lives remaining.".format(self.name, lost, self.lives))
         return self.lives
 
+    def setLives(self, lives):
+        self.lives = lives
+
+    # Abstract methods for round-level updates
     def choosePower(self, cand, shown):
         pass
 
@@ -50,3 +56,5 @@ class Player:
 
     def chooseCard(self, calls, wins, lastHand, power, plays, namedPlays, shown, cardRange):
         pass
+
+    # Miscellaneous methods

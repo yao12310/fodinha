@@ -39,6 +39,7 @@ class Round:
         self.wins = [0] * self.numPlayers
         self.diffs = [None] * self.numPlayers
         self.hands = []
+        orderedWins = []
 
         # Shuffle and deal cards, recover remaining cards in deck
         # If one card hand, also recover the deals to use for making calls
@@ -68,6 +69,7 @@ class Round:
             else:
                 first = winner
                 self.wins[winner] += 1 + winCarry
+                orderedWins.append(winner)
                 winCarry = 0
             print()
             time.sleep(SLEEP_TIME)
@@ -80,6 +82,8 @@ class Round:
 
         for i in range(self.numPlayers):
             self.diffs[i] = abs(self.calls[i] - self.wins[i])
+            if Q_LEARN in self.players[i].name:
+                self.players[i].update([winner == i for winner in orderedWins])
 
     def dealCards(self, oneCard):
         print("Dealing cards...")

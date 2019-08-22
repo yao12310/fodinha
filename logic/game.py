@@ -7,6 +7,7 @@ from logic.round import Round
 from players.choose import chooseStrategy
 from utils.card import CardCollection
 from utils.constants import SLEEP_TIME
+from utils.constants import Q_LEARN
 
 '''
 Top level object, stores highest level information:
@@ -55,6 +56,10 @@ class Game:
             # Update game progress
             self.updateRound()
 
+        for player in self.players:
+            if Q_LEARN in player.name:
+                player.saveQVals()
+
         print("Game over! The winner is {}.".format(self.winner))
         standString = "Final Standings:"
         self.standings = [self.winner] + self.elim[::-1]
@@ -82,7 +87,7 @@ class Game:
                 newElims.append(i)
         print()
         time.sleep(SLEEP_TIME)
-        # need to reverrse list to avoid indexing issues when eliminating players
+        # need to reverse list to avoid indexing issues when eliminating players
         return newElims[::-1]
 
     def updateRoster(self, elims):
@@ -102,6 +107,11 @@ class Game:
                 if self.players[nameIndex].lives != topLives:
                     realElims.append(nameIndex)
 
+            # update elimination list respecting order of lives
+            sortedElims = sorted([(self.players[i].lives, i) for i in realElims])
+            for elim in sortedElims:
+                self.elim.append(self.names[elim[1]])
+
             # have to keep moving dealer index until reaching a non-elim player
             while self.dealer in realElims:
                 self.dealer = (self.dealer + 1) % self.numPlayers
@@ -113,14 +123,18 @@ class Game:
                         self.dealer -= 1
                     name = self.names.pop(nameIndex)
                     self.players.pop(nameIndex)
-                    self.elim.append(name)
                     self.numPlayers -= 1
                     print("{} has been eliminated! {} players remain.".format(name, self.numPlayers))
                 else:
-                    self.players[nameIndex].lives = 1
+                    self.players[nameIndex].setLives(1)
                     print("{} remains in game with 1 life!".format(self.names[nameIndex]))
         else:
             print("Eliminating players...")
+            # add players to elimination list respecting order of lives
+            sortedElims = sorted([(self.players[i].lives, i) for i in elims])
+            for elim in sortedElims:
+                self.elim.append(self.names[elim[1]])
+
             # have to keep moving dealer index until reaching a non-elim player
             while self.dealer in elims:
                 self.dealer = (self.dealer + 1) % self.numPlayers
@@ -130,7 +144,6 @@ class Game:
                     self.dealer -= 1
                 name = self.names.pop(nameIndex)
                 self.players.pop(nameIndex)
-                self.elim.append(name)
                 self.numPlayers -= 1
                 print("{} has been eliminated! {} players remain.".format(name, self.numPlayers))
         print()

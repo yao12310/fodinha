@@ -46,7 +46,7 @@ TODO: Move different player types into individual files
 TODO: Move utils and game play classes into separate directories
 	>> Done
 TODO: Decide on best inheritance structure for Easy - Medium - Hard AIs
-TODO: Refactor counting < and > card counts in probabilistic agents
+TODO: Refactor counting < and > card counts into a util
 
 Bug Fixes:
 
@@ -72,6 +72,7 @@ TODO: README with rules and project overview
 	>> Done
 TODO: Exception for non-implemented player classes
 TODO: Correct standings past first place at end of game
+	>> Done
 TODO: Math details in README
 '''
 
