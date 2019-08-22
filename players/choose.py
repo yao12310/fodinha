@@ -7,9 +7,10 @@ from players.search import Search
 from players.prob import Easy
 from players.prob import Medium
 from players.prob import Hard
-from players.softmax import Softmax
+from players.logistic import Logistic
 from players.nn import NeuralNet
-from players.rf import RandomForest
+from players.rf import 
+from players.reinforcement import Reinforcement
 from utils.constants import *
 
 '''
@@ -25,11 +26,13 @@ def chooseStrategy(name, numLives, history):
         return Hard(name, numLives, history)
     elif SEARCH in name:
         return Search(name, numLives, history)
-    elif SOFTMAX in name:
-        return Softmax(name, numLives, history)
+    elif LOGISTIC in name:
+        return Logistic(name, numLives, history)
     elif NEURAL_NET in name:
         return NeuralNet(name, numLives, history)
     elif RANDOM_FOREST in name:
         return RandomForest(name, numLives, history)
+    elif REINFORCEMENT in name:
+        return Reinforcement(name, numLives, history)
     else:
         return Manual(name, numLives, history)

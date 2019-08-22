@@ -63,7 +63,7 @@ class Round:
             if lastHand:
                 print("Last hand of the round! Will force plays from hand, no selection.")
             winner = self.startHand(first, lastHand)
-            if not winner:
+            if winner is None:
                 winCarry += 1
             else:
                 first = winner

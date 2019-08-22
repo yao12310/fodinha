@@ -24,6 +24,7 @@ TODO: Medium AI: Non-random selection of cards during hands
 	>> Done
 TODO: Trial mode for playing arbitrary numbers of games
 	>> Done
+TODO: Softmax AI: general infrastructure for ML AI and model design
 
 Refactoring:
 
@@ -57,7 +58,8 @@ TODO: Edge case handling for when the entire hand cancels
 	>> Done
 TODO: Fix winner not going first in the next hand
 	>> Done
-TODO: Suits shouldn't matter when ranking in AI (except power) -- use cardRanker but preserve O(n)
+TODO: Suits shouldn't matter when ranking in AI (except power) -- preserve O(n)
+	>> Done
 
 Misc:
 
@@ -70,6 +72,7 @@ TODO: README with rules and project overview
 	>> Done
 TODO: Exception for non-implemented player classes
 TODO: Correct standings past first place at end of game
+TODO: Math details in README
 '''
 
 import sys
@@ -77,16 +80,18 @@ from random import shuffle
 from numpy import mean
 
 from logic.game import Game
+from utils.constants import PLAY
+from utils.constants import TRIAL
 
-trials = bool(sys.argv[1])
-if not trials:
+mode = sys.argv[1]
+if mode == PLAY:
 	cardRange = int(sys.argv[2])
 	numLives = int(sys.argv[3])
 	powerTries = int(sys.argv[4])
 	names = sys.argv[5:]
 	game = Game(names, cardRange, numLives, powerTries)
 	game.playGame()
-else:
+elif mode == TRIAL:
 	numTrials = int(sys.argv[2])
 	cardRange = int(sys.argv[3])
 	numLives = int(sys.argv[4])
@@ -107,4 +112,5 @@ else:
 	print("Trials: {}".format(numTrials))
 	print("Wins by player: {}".format(wins))
 	print("Average finish by player: {}".format({name: mean(stand) for (name, stand) in finishes.items()}))
-
+else:
+	print("Invalid game mode selected!")

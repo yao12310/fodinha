@@ -42,38 +42,51 @@ class Easy(Player):
         if namedDeals:
             return self.makeOneCardCall(currCalls, numPlayers, roundNum, power, shown, illegal, cardRange, cardRanker, namedDeals)
 
+        currRanks = set([card.rank for card in self.currHand])
         allCards = []
         for num in range(cardRange):
             if num == power:
                 continue
+            currRank = []
+            inHand = []
             for suit in CardInfo.SUITS:
                 card = Card(num, suit)
-                allCards.append((card, card in self.currHand, card in shown))
+                if card in self.currHand:
+                    inHand.append(card)
+                currRank.append((card, card in shown))
+            allCards.append((currRank, inHand))
         for suit in CardInfo.SUITS:
             powerCard = Card(power, suit)
-            allCards.append((powerCard, powerCard in self.currHand, powerCard in shown))
+            if powerCard in self.currHand:
+                allCards.append(([(powerCard, powerCard in shown)], [powerCard]))
+            else:
+                allCards.append(([(powerCard, powerCard in shown)], []))
 
         count = 0
         # number of cards remaining that each card is greater than
         greatThan = {}
-        for cardData in allCards:
-            if cardData[1]:
-                greatThan[cardData[0]] = count
-            elif cardData[2]:
-                continue
-            else:
-                count += 1
+        for rank in allCards:
+            if rank[1]:
+                for card in rank[1]:
+                    greatThan[card] = count
+            for cardData in rank[0]:
+                if cardData[1]:
+                    continue
+                else:
+                    count += 1
 
         count = 0
         # number of cards remaining that each card is less than
         lessThan = {}
-        for cardData in allCards[::-1]:
-            if cardData[1]:
-                lessThan[cardData[0]] = count
-            elif cardData[2]:
-                continue
-            else:
-                count += 1
+        for rank in allCards[::-1]:
+            if rank[1]:
+                for card in rank[1]:
+                    lessThan[card] = count
+            for cardData in rank[0]:
+                if cardData[1]:
+                    continue
+                else:
+                    count += 1
 
         call = 0
         total = 0
