@@ -7,8 +7,7 @@ import time
 from players.player import Player
 from utils.card import CardInfo
 from utils.constants import SLEEP_TIME
-from utils.constants import POWER_YES
-from utils.constants import POWER_NO
+from utils.constants import Gameplay
 
 '''
 Class for human player.
@@ -18,7 +17,7 @@ class Manual(Player):
 
     def choosePower(self, cand, shown):
         decision = input("{}, would you like for {} to be the power card? [{}/{}]: ".format(self.name, CardInfo.RANKS[cand], POWER_YES, POWER_NO))
-        if decision == POWER_YES or decision == POWER_NO:
+        if decision == Gameplay.POWER_YES or decision == Gameplay.POWER_NO:
             return decision
         else:
             print("You must enter either {} or {} for your decision!".format(POWER_YES, POWER_NO))

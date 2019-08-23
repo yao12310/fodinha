@@ -10,8 +10,7 @@ from utils.card import Card
 from utils.card import CardInfo
 from utils.card import CardUtils
 from utils.constants import SLEEP_TIME
-from utils.constants import POWER_YES
-from utils.constants import POWER_NO
+from utils.constants import Gameplay
 
 '''
 Class for Easy AI player (expected utility).
@@ -34,8 +33,8 @@ class Easy(Player):
 
     def choosePower(self, cand, shown):
         if cand in shown:
-            return POWER_YES
-        return POWER_NO
+            return Gameplay.POWER_YES
+        return Gameplay.POWER_NO
 
     def makeCall(self, currCalls, numPlayers, roundNum, power, shown, illegal, cardRange, cardRanker, namedDeals = {}):
         # at beginning of each round, store the card ranker for the current round
@@ -171,8 +170,8 @@ class Medium(Player):
 
     def choosePower(self, cand, shown):
         if cand in shown:
-            return POWER_YES
-        return POWER_NO
+            return Gameplay.POWER_YES
+        return Gameplay.POWER_NO
 
     def makeCall(self, currCalls, numPlayers, roundNum, power, shown, illegal, cardRange, cardRanker, namedDeals = {}):
         return Easy.makeCall(self, currCalls, numPlayers, roundNum, power, shown, illegal, cardRange, cardRanker, namedDeals)    

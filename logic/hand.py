@@ -2,7 +2,7 @@
 File for Hand class.
 '''
 
-from utils.constants import CANCELLED
+from utils.constants import Gameplay
 
 '''
 Hand stores hand-level information:
@@ -48,11 +48,11 @@ class Hand:
                 if not cancelled:
                     self.plays[curr] = choice
                 else:
-                    self.plays[curr] = CANCELLED
+                    self.plays[curr] = Gameplay.CANCELLED
             else:
                 self.plays[curr] = choice
 
-        if all([play == CANCELLED for play in self.plays]):
+        if all([play == Gameplay.CANCELLED for play in self.plays]):
             print("All hands cancelled this round!")
             print("Win will carry over to the next round.")
             self.winner = None
@@ -67,14 +67,14 @@ class Hand:
         for i in range(self.numPlayers):
             if not self.plays[i]:
                 continue
-            if self.plays[i] == CANCELLED:
+            if self.plays[i] == Gameplay.CANCELLED:
                 continue
             if self.plays[i].rank == choice.rank:
                 print("{}'s {} cancelled with {}'s {}!"
                     .format(name, str(choice), self.names[i], str(self.plays[i]))
                 )
                 print()
-                self.plays[i] = CANCELLED
+                self.plays[i] = Gameplay.CANCELLED
                 return True
         return False
 

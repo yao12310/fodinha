@@ -7,7 +7,7 @@ from logic.round import Round
 from players.choose import chooseStrategy
 from utils.card import CardCollection
 from utils.constants import SLEEP_TIME
-from utils.constants import Q_LEARN
+from utils.constants import Strategies
 
 '''
 Top level object, stores highest level information:
@@ -57,7 +57,7 @@ class Game:
             self.updateRound()
 
         for player in self.players:
-            if Q_LEARN in player.name:
+            if Strategies.Q_LEARN in player.name:
                 player.saveQVals()
 
         print("Game over! The winner is {}.".format(self.winner))

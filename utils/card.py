@@ -5,7 +5,7 @@ Util file for Card-related classes.
 import itertools
 import random
 
-from utils.constants import CANCELLED
+from utils.constants import Gameplay
 
 '''
 Class for data structure representing collection of cards, used for decks, player hands, and lists of shown cards
@@ -109,7 +109,7 @@ class CardUtils:
         def cardRanker(card):
             if not card:
                 return -1
-            if card == CANCELLED:
+            if card == Gameplay.CANCELLED:
                 return -1
             if card.num != power:
                 return card.num

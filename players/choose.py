@@ -11,28 +11,28 @@ from players.logistic import Logistic
 from players.nn import NeuralNet
 from players.reinforcement import QLearning
 from players.reinforcement import QApproximate
-from utils.constants import *
+from utils.constants import Strategies
 
 '''
 Method for decision-making: called by Game instance
 Makes decisions for player type based on name
 '''
 def chooseStrategy(name, numLives, history):
-    if EASY in name:
+    if Strategies.EASY in name:
         return Easy(name, numLives, history)
-    elif MEDIUM in name:
+    elif Strategies.MEDIUM in name:
         return Medium(name, numLives, history)
-    elif HARD in name:
+    elif Strategies.HARD in name:
         return Hard(name, numLives, history)
-    elif SEARCH in name:
+    elif Strategies.SEARCH in name:
         return Search(name, numLives, history)
-    elif LOGISTIC in name:
+    elif Strategies.LOGISTIC in name:
         return Logistic(name, numLives, history)
-    elif NEURAL_NET in name:
+    elif Strategies.NEURAL_NET in name:
         return NeuralNet(name, numLives, history)
-    elif Q_LEARN in name:
+    elif Strategies.Q_LEARN in name:
         return QLearning(name, numLives, history)
-    elif Q_APPROXIMATE in name:
+    elif Strategies.Q_APPROXIMATE in name:
         return QApproximate(name, numLives, history)
     else:
         return Manual(name, numLives, history)

@@ -8,7 +8,9 @@ from players.player import Player
 from utils.card import CardInfo
 from utils.card import CardCollection
 from utils.card import CardUtils
-from utils.constants import *
+from utils.constants import SLEEP_TIME
+from utils.constants import Gameplay
+from utils.constants import Strategies
 
 '''
 Round stores round-level information:
@@ -82,7 +84,7 @@ class Round:
 
         for i in range(self.numPlayers):
             self.diffs[i] = abs(self.calls[i] - self.wins[i])
-            if Q_LEARN in self.players[i].name:
+            if Strategies.Q_LEARN in self.players[i].name:
                 self.players[i].update([winner == i for winner in orderedWins])
 
     def dealCards(self, oneCard):
@@ -122,13 +124,13 @@ class Round:
 
             decision = player.choosePower(cand, shown)
 
-            if decision == POWER_YES:
+            if decision == Gameplay.POWER_YES:
                 print("{} has been chosen as the power card!".format(namedCand))
                 shown.append(draw)
                 print()
                 time.sleep(SLEEP_TIME)
                 return (cand, shown)
-            if decision == POWER_NO:
+            if decision == Gameplay.POWER_NO:
                 print("{} has rejected {} as the power card.".format(player.name, namedCand))
                 shown.append(draw)
                 

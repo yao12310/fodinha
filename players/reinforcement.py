@@ -8,9 +8,7 @@ import random
 from collections import defaultdict
 
 from players.player import Player
-from utils.constants import learning
-from utils.constants import CALLS_QVALS
-from utils.constants import PLAY_QVALS
+from utils.constants import Learning
 
 '''
 An agent which learns Q-Values of (state, action) pairings through experience.
@@ -37,17 +35,17 @@ class QLearning(Player):
 
     def __init__(self, name, numLives, history):
         Player.__init__(self, name, numLives, history)
-        self.alpha = learning.alpha
-        self.gamma = learning.gamma
-        self.epsilon = learning.epsilon
-        if os.path.exists(name + "_" + CALL_QVALS):
-            with open(name + "_" + CALLS_QVALS):
-                self.qCalls = json.load(name + "_" + CALLS_QVALS)
+        self.alpha = Learning.ALPHA
+        self.gamma = Learning.GAMMA
+        self.epsilon = Learning.EPSILON
+        if os.path.exists(name + "_" + Learning.CALL_QVALS):
+            with open(name + "_" + Learning.CALLS_QVALS) as file:
+                self.qCalls = json.load(file)
         else:
             self.qCalls = defaultdict(float)
-        if os.path.exists(name + "_" + PLAY_QVALS):
-            with open(name + "_" + PLAY_QVALS):
-                self.qPlay = json.load(name + "_" + PLAY_QVALS)
+        if os.path.exists(name + "_" + Learning.PLAY_QVALS):
+            with open(name + "_" + Learning.PLAY_QVALS) as file:
+                self.qPlay = json.load(file)
         else:
             self.qPlay = defaultdict(float)
 
@@ -133,12 +131,12 @@ class QLearning(Player):
     def saveQVals(self):
         if os.path.exists(name + "_" + CALL_QVALS):
             os.remove(name + "_" + CALL_QVALS)
-        with open(name + "_" + CALL_QVALS, "w"):
-            json.dump(self.qCalls)
+        with open(name + "_" + CALL_QVALS, "w") as file:
+            json.dump(self.qCalls, file)
         if os.path.exists(name + "_" + PLAY_QVALS):
             os.remove(name + "_" + PLAY_QVALS)
-        with open(name + "_" + PLAY_QVALS, "w"):
-            json.dump(self.qPlays)
+        with open(name + "_" + PLAY_QVALS, "w") as file:
+            json.dump(self.qPlays, file)
 
 class QApproximate(Player):
     pass

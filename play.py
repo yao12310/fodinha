@@ -81,18 +81,17 @@ from random import shuffle
 from numpy import mean
 
 from logic.game import Game
-from utils.constants import PLAY
-from utils.constants import TRIAL
+from utils.constants import Modes
 
 mode = sys.argv[1]
-if mode == PLAY:
+if mode == Modes.PLAY:
 	cardRange = int(sys.argv[2])
 	numLives = int(sys.argv[3])
 	powerTries = int(sys.argv[4])
 	names = sys.argv[5:]
 	game = Game(names, cardRange, numLives, powerTries)
 	game.playGame()
-elif mode == TRIAL:
+elif mode == Modes.TRIAL:
 	numTrials = int(sys.argv[2])
 	cardRange = int(sys.argv[3])
 	numLives = int(sys.argv[4])
