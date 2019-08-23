@@ -153,7 +153,7 @@ class Easy(Player):
         return choice
 
 '''
-Class for Medium AI player (expected utility).
+Class for Hard AI player (expected utility).
 Implements round-level decisions via the following logic:
     Choosing power card: Same as Easy
     Make call: Same as Easy
@@ -166,7 +166,7 @@ Implements round-level decisions via the following logic:
             Considers whether cards already played this hand can win and players coming after
         Check expected value of wins for playing each card, take card which gets closest to call
 '''
-class Medium(Player):
+class Hard(Player):
 
     def choosePower(self, cand, shown):
         if cand in shown:
@@ -254,7 +254,3 @@ class Medium(Player):
         print()
         time.sleep(SLEEP_TIME)
         return choice
-
-class Hard(Player):
-
-    pass

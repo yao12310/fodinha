@@ -19,7 +19,6 @@ class Gameplay:
 # Strategies
 class Strategies:
     EASY = "EASY"
-    MEDIUM = "MEDIUM"
     HARD = "HARD"
     RANDOM_FOREST = "RANDOM_FOREST"
     NEURAL_NET = "NEURAL_NET"
@@ -30,9 +29,13 @@ class Strategies:
 
 # For Q-Learning Agent
 class Learning:
-    ALPHA = None
+    Q_DIREC = "players/qvals/"
+    ALPHA = .8
     GAMMA = None
-    EPSILON = None
-    REWARD = 1
-    CALLS_QVALS = "calls_qvals.json"
-    PLAY_QVALS = "play_qvals.json"
+    EPSILON = .5
+    REWARD = 2
+    CALLS_QVALS = "calls_qvals.pickle"
+    PLAY_QVALS = "play_qvals.pickle"
+    DECAY = "DECAY"
+    DECAY_INCREMENT = .000001
+    USE_RANKS = False

@@ -65,12 +65,11 @@ Similarly, players of the game are also represented as objects, with several var
  * Manual (default), which represents live human players. **[COMPLETE]**
  * Expected utility-based agents, with several variations of difficulty:
    * Easy (```EASY```): Which compute expected values of wins assuming random play and play cards randomly. **[COMPLETE]**
-   * Medium (```MEDIUM```): Similar to Easy, but do not play cards randomly. **[COMPLETE]**
-   * Hard (```HARD```): Similar to medium, but considering additional information (previous calls, cancellations). **[IN PROGRESS]**
+   * Hard (```HARD```): Similar to Easy, but do not play cards randomly. **[COMPLETE]**
  * Search-based agents (```SEARCH```), which play the game using search algorithms. **[IN PROGRESS]**
  * Reinforcement learning-based agents, which apply reinforcement learning.
-   * QLearning (```QLEARN```): Learn Q-values through experience (epsilon greedy) **[IN PROGRESS]**
-   * QApproximate (```QAPPROXIMATE```): Learn weights for approximating Q-values linearly **[IN PROGRESS]**
+   * QLearning (```Q_LEARN```): Learn Q-values through experience (epsilon greedy) **[COMPLETE]**
+   * QApproximate (```Q_APPROXIMATE```): Learn weights for approximating Q-values linearly **[IN PROGRESS]**
  * Classification-based agents, which use learning to treat decisions in the game as classification problems:
    * Softmax (```LOGISTIC```): Simple multinomial logistic regression model. **[IN PROGRESS]**
    * Neural Network (```NEURAL_NET```): Neural Network-based play. **[IN PROGRESS]**

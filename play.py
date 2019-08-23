@@ -45,8 +45,10 @@ TODO: Move different player types into individual files
 	>> Done
 TODO: Move utils and game play classes into separate directories
 	>> Done
-TODO: Decide on best inheritance structure for Easy - Medium - Hard AIs
+TODO: Decide on best inheritance structure for Easy -  Hard AIs
 TODO: Refactor counting < and > card counts into a util
+TODO: Put constants into static classes
+	>> Done
 
 Bug Fixes:
 
@@ -66,6 +68,7 @@ Misc:
 TODO: Doc strings for Player classes
 	>> Done
 TODO: Show "Cancelled" instead of "None"
+	>> Done
 TODO: Print dictionaries more cleanly instead of on one line (also, order entries by play)
 TODO: Plural vs singular when updating life counts
 TODO: README with rules and project overview
@@ -93,13 +96,19 @@ if mode == Modes.PLAY:
 	game.playGame()
 elif mode == Modes.TRIAL:
 	numTrials = int(sys.argv[2])
-	cardRange = int(sys.argv[3])
-	numLives = int(sys.argv[4])
-	powerTries = int(sys.argv[5])
-	names = sys.argv[6:]
+	writeStep = int(sys.argv[3])
+	writeFile = sys.argv[4]
+	cardRange = int(sys.argv[5])
+	numLives = int(sys.argv[6])
+	powerTries = int(sys.argv[7])
+	names = sys.argv[8:]
 	wins = {name: 0 for name in names}
 	finishes = {name: [] for name in names}
-	for _ in range(numTrials):
+	for i in range(numTrials):
+		if i != 0 and i % writeStep == 0:
+			with open("count.txt", "a") as f:
+				f.write("Iteration: {}\n Wins by Player: {}\n Average Finish (last {}): {}\n"
+					.format(i, wins, writeStep, {name: mean(stand[-writeStep:]) for (name, stand) in finishes.items()}))
 		shuffle(names)
 		game = Game(names.copy(), cardRange, numLives, powerTries)
 		game.playGame()

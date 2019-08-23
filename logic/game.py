@@ -27,6 +27,7 @@ class Game:
         self.rounds = []
         self.names = names
         self.players = [chooseStrategy(name, numLives, self.rounds) for name in names]
+        self.origPlayers = self.players.copy()
         self.cardRange = cardRange
         self.deck = CardCollection(cardRange = cardRange)
         self.numPlayers = len(names)
@@ -56,7 +57,7 @@ class Game:
             # Update game progress
             self.updateRound()
 
-        for player in self.players:
+        for player in self.origPlayers:
             if Strategies.Q_LEARN in player.name:
                 player.saveQVals()
 

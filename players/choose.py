@@ -5,7 +5,6 @@ File for player type choosing logic.
 from players.manual import Manual
 from players.search import Search
 from players.prob import Easy
-from players.prob import Medium
 from players.prob import Hard
 from players.logistic import Logistic
 from players.nn import NeuralNet
@@ -20,8 +19,6 @@ Makes decisions for player type based on name
 def chooseStrategy(name, numLives, history):
     if Strategies.EASY in name:
         return Easy(name, numLives, history)
-    elif Strategies.MEDIUM in name:
-        return Medium(name, numLives, history)
     elif Strategies.HARD in name:
         return Hard(name, numLives, history)
     elif Strategies.SEARCH in name:

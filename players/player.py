@@ -56,5 +56,3 @@ class Player:
 
     def chooseCard(self, calls, wins, lastHand, power, plays, namedPlays, shown, cardRange):
         pass
-
-    # Miscellaneous methods
