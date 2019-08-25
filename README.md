@@ -56,21 +56,46 @@ Playing the game can be done by running the Python script ```play.py```, with ar
  * ```tries```: positive integer representing the number of tries a player has to select a power card.
  * ```names```: list of strings representing the names of the players in the game.
 
-## Project Overview
+## Project Technical Overview
+
+### Game Logic
 
 Logic for the game follows an object-oriented paradigm, with classes representing the overall ```Game``` and individually played ```Rounds``` and ```Hand``` instances. More documentation can be found in the respective files reflecting the design of these objects.
 
+### Automated Play
+
 Similarly, players of the game are also represented as objects, with several variations. To include one of these agents in a game, use a name that contains the appropriate string (i.e. for an Easy agent, include a player named ```EASY_1```).
 
- * Manual (default), which represents live human players. **[COMPLETE]**
- * Random agents (```RANDOM```), which play the game completely randomly (used as a benchmark) **[COMPLETE]**
+**Completed Implementations:**
+
+*Game data given below come from trials of 10,000 4 player games with standard settings of 5 lives, card range 10, and 3 power tries.*
+
+*Technical details for the latter two agent types can be found in documentation in their implementation files: ```prob.py``` and ```reinforcement.py```.*
+
+ * Manual (default), which represents live human players.
+ * Random agents (```RANDOM```), which play the game completely randomly (used as a benchmark)
  * Expected utility-based agents, with several variations of difficulty:
-   * Easy (```EASY```): Which compute expected values of wins assuming random play and play cards randomly. **[COMPLETE]**
-   * Hard (```HARD```): Similar to Easy, but do not play cards randomly. **[COMPLETE]**
- * Search-based agents (```SEARCH```), which play the game using search algorithms. **[IN PROGRESS]**
+   * Easy (```EASY```): Which compute expected values of and play cards randomly.
+     * Models card play as hypergeometric distribution to compute expected number of wins
+     * Despite still largely random play, performs quite well: wins over 91% of games versus Random agents
+   * Hard (```HARD```): Similar to Easy, but do not play cards randomly.
+     * Computes probability of victory for current hand and future hands for all cards in hand
+     * Chooses card play that minimizes difference between future expected wins and remaining calls
+     * Plays nearly optimally given the assumption of random play: wins 97% of games versus Random agents
+     * Despite identical strategy for making calls, improvement in card play gives agent average place of 1.6 versus Easy agents (average 2.6 place).
  * Reinforcement learning-based agents, which apply reinforcement learning.
-   * QLearning (```Q_LEARN```): Learn Q-values through experience (epsilon greedy) **[COMPLETE]**
-   * QApproximate (```Q_APPROXIMATE```): Learn weights for approximating Q-values linearly **[IN PROGRESS]**
- * Classification-based agents, which use learning to treat decisions in the game as classification problems:
-   * Softmax (```LOGISTIC```): Simple multinomial logistic regression model. **[IN PROGRESS]**
-   * Neural Network (```NEURAL_NET```): Neural Network-based play. **[IN PROGRESS]**
+   * QLearning (```Q_LEARN```): Learn Q-values through experience (epsilon greedy)
+     * Models state using total number of players, calls / plays so far, cards in hand, players calling / playing after agent
+     * Performs Bellman updates and caches values of (state, action) pairings
+     * Takes random actions to further exploration of state space
+     * Poor performance possibly due to size of state space, wins <10% of games against Easy agents.
+   * QApproximate (```Q_APPROXIMATE```): Learn weights for approximating Q-values linearly
+     * Resolves state space size issue by learning weights for linear approximation of Q-values
+     * See code documentation for specific features designed for use in making calls and playing cards.
+
+**Future Implementations:**
+ * Search-based agents (```SEARCH```), which play the game using search algorithms.
+ * Classification-based agents, which use learning to solve decisions in the game as classification problems:
+   * Softmax (```LOGISTIC```): Simple multinomial logistic regression model.
+   * Neural Network (```NEURAL_NET```): Neural Network-based play.
+

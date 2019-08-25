@@ -40,3 +40,4 @@ class Learning:
     DECAY = "DECAY"
     DECAY_INCREMENT = .0001
     USE_RANKS = False
+    ALL_LESS = False
