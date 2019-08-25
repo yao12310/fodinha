@@ -58,7 +58,7 @@ class Game:
             self.updateRound()
 
         for player in self.origPlayers:
-            if Strategies.Q_LEARN in player.name:
+            if Strategies.Q_LEARN in player.name or Strategies.Q_APPROXIMATE in player.name:
                 player.saveQVals()
 
         print("Game over! The winner is {}.".format(self.winner))

@@ -63,6 +63,7 @@ Logic for the game follows an object-oriented paradigm, with classes representin
 Similarly, players of the game are also represented as objects, with several variations. To include one of these agents in a game, use a name that contains the appropriate string (i.e. for an Easy agent, include a player named ```EASY_1```).
 
  * Manual (default), which represents live human players. **[COMPLETE]**
+ * Random agents (```RANDOM```), which play the game completely randomly (used as a benchmark) **[COMPLETE]**
  * Expected utility-based agents, with several variations of difficulty:
    * Easy (```EASY```): Which compute expected values of wins assuming random play and play cards randomly. **[COMPLETE]**
    * Hard (```HARD```): Similar to Easy, but do not play cards randomly. **[COMPLETE]**

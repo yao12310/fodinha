@@ -3,6 +3,7 @@ File for player type choosing logic.
 '''
 
 from players.manual import Manual
+from players.random import Random
 from players.search import Search
 from players.prob import Easy
 from players.prob import Hard
@@ -17,7 +18,9 @@ Method for decision-making: called by Game instance
 Makes decisions for player type based on name
 '''
 def chooseStrategy(name, numLives, history):
-    if Strategies.EASY in name:
+    if Strategies.RANDOM in name:
+        return Random(name, numLives, history)
+    elif Strategies.EASY in name:
         return Easy(name, numLives, history)
     elif Strategies.HARD in name:
         return Hard(name, numLives, history)

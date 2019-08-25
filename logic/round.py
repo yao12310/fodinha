@@ -68,6 +68,7 @@ class Round:
             winner = self.startHand(first, lastHand)
             if winner is None:
                 winCarry += 1
+                orderedWins.append(None)
             else:
                 first = winner
                 self.wins[winner] += 1 + winCarry
@@ -84,7 +85,8 @@ class Round:
 
         for i in range(self.numPlayers):
             self.diffs[i] = abs(self.calls[i] - self.wins[i])
-            if Strategies.Q_LEARN in self.players[i].name:
+            player = self.players[i]
+            if Strategies.Q_LEARN in player.name or Strategies.Q_APPROXIMATE in player.name:
                 self.players[i].update([winner == i for winner in orderedWins])
 
     def dealCards(self, oneCard):
